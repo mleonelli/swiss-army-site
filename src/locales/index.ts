@@ -6,9 +6,9 @@ import { de } from './de';
 // Language configuration - easily enable/disable languages here
 export const LANGUAGE_CONFIG = {
   en: { enabled: true, translations: en, name: 'English', flag: '🇺🇸' },
-  es: { enabled: true, translations: es, name: 'Español', flag: '🇪🇸' },
-  fr: { enabled: true, translations: fr, name: 'Français', flag: '🇫🇷' },
-  de: { enabled: true, translations: de, name: 'Deutsch', flag: '🇩🇪' },
+  es: { enabled: false, translations: es, name: 'Español', flag: '🇪🇸' },
+  fr: { enabled: false, translations: fr, name: 'Français', flag: '🇫🇷' },
+  de: { enabled: false, translations: de, name: 'Deutsch', flag: '🇩🇪' },
 } as const;
 
 // Get only enabled languages
