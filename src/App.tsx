@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { Header } from './components/Header';
-import { Navigation, Category } from './components/Navigation';
+import Navigation, { Category } from './components/Navigation';
 import { Welcome } from './components/Welcome';
 import { ToolContainer } from './components/ToolContainer';
 
