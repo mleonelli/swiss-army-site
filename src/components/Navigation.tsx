@@ -109,7 +109,7 @@ const Navigation: React.FC<NavigationProps> = ({
       )}
 
       {/* Desktop Navigation */}
-      <nav className="hidden md:block w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-full overflow-y-auto">
+      <nav className="hidden md:block fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto z-30">
         <div className="p-4">
           
           {Object.entries(categories).map(([categoryKey, category]) => (
