@@ -6,18 +6,18 @@ interface NavigationProps {
   activeCategory: string;
   activeSubcategory: string;
   activeTool: string;
-  onCategoryChange: (category: string) => void;
-  onSubcategoryChange: (subcategory: string) => void;
-  onToolChange: (tool: string) => void;
+  setActiveCategory: (category: string) => void;
+  setActiveSubcategory: (subcategory: string) => void;
+  setActiveTool: (tool: string) => void;
 }
 
 const Navigation: React.FC<NavigationProps> = ({
   activeCategory,
   activeSubcategory,
   activeTool,
-  onCategoryChange,
-  onSubcategoryChange,
-  onToolChange,
+  setActiveCategory,
+  setActiveSubcategory,
+  setActiveTool,
 }) => {
   const { t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -75,9 +75,9 @@ const Navigation: React.FC<NavigationProps> = ({
   };
 
   const handleToolSelect = (category: string, subcategory: string, tool: string) => {
-    onCategoryChange(category);
-    onSubcategoryChange(subcategory);
-    onToolChange(tool);
+    setActiveCategory(category);
+    setActiveSubcategory(subcategory);
+    setActiveTool(tool);
     setIsMobileMenuOpen(false);
   };
 
