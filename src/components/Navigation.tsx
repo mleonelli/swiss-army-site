@@ -1,210 +1,223 @@
 import React, { useState } from 'react';
-import { Calculator, DollarSign, Shuffle, Heart, Type } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
-export type Category = 'welcome' | 'text' | 'calculation' | 'financial' | 'randomizer' | 'health';
-
-export interface Subcategory {
-  id: string;
-  name: string;
-  tools: Tool[];
-}
-
-export interface Tool {
-  id: string;
-  name: string;
-  component: string;
-}
-
 interface NavigationProps {
-  activeCategory: Category;
-  setActiveCategory: (category: Category) => void;
-  activeSubcategory: string | null;
-  setActiveSubcategory: (subcategory: string | null) => void;
-  activeTool: string | null;
-  setActiveTool: (tool: string | null) => void;
+  activeCategory: string;
+  activeSubcategory: string;
+  activeTool: string;
+  setActiveCategory: (category: string) => void;
+  setActiveSubcategory: (subcategory: string) => void;
+  setActiveTool: (tool: string) => void;
 }
 
-export function Navigation({ 
-  activeCategory, 
-  setActiveCategory, 
-  activeSubcategory, 
-  setActiveSubcategory,
+const Navigation: React.FC<NavigationProps> = ({
+  activeCategory,
+  activeSubcategory,
   activeTool,
-  setActiveTool 
-}: NavigationProps) {
+  setActiveCategory,
+  setActiveSubcategory,
+  setActiveTool,
+}) => {
   const { t } = useLanguage();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([activeCategory]);
 
-  const subcategories: Record<Category, Subcategory[]> = {
-    welcome: [],
-    text: [
-      {
-        id: 'text-processing',
-        name: t('nav.textProcessing'),
-        tools: [
-          { id: 'text-sorter', name: t('tools.textSorter'), component: 'TextSorter' }
-        ]
-      },
-      {
-        id: 'text-analysis',
-        name: t('nav.textAnalysis'),
-        tools: [
-          { id: 'word-counter', name: t('tools.wordCounter'), component: 'WordCounter' }
-        ]
+  const categories = {
+    calculators: {
+      name: t('nav.calculationTools'),
+      subcategories: {
+        basic: {
+          name: t('nav.basicMath'),
+          tools: ['basicCalculator', 'bmiCalculator', 'calorieCalculator']
+        },
+        financial: {
+          name: t('nav.pricing'),
+          tools: ['discountCalculator', 'compoundInterest']
+        }
       }
-    ],
-    calculation: [
-      {
-        id: 'basic-math',
-        name: t('nav.basicMath'),
-        tools: [
-          { id: 'basic-calculator', name: t('tools.basicCalculator'), component: 'BasicCalculator' }
-        ]
-      },
-      {
-        id: 'unit-conversion',
-        name: t('nav.unitConversion'),
-        tools: [
-          { id: 'temperature-converter', name: t('tools.temperatureConverter'), component: 'TemperatureConverter' }
-        ]
+    },
+    converters: {
+      name: t('nav.calculationTools'),
+      subcategories: {
+        units: {
+          name: t('nav.unitConversion'),
+          tools: ['temperatureConverter']
+        }
       }
-    ],
-    financial: [
-      {
-        id: 'pricing',
-        name: t('nav.pricing'),
-        tools: [
-          { id: 'discount-calculator', name: t('tools.discountCalculator'), component: 'DiscountCalculator' }
-        ]
-      },
-      {
-        id: 'investment',
-        name: t('nav.investment'),
-        tools: [
-          { id: 'compound-interest', name: t('tools.compoundInterest'), component: 'CompoundInterestCalculator' }
-        ]
+    },
+    generators: {
+      name: t('nav.randomizerTools'),
+      subcategories: {
+        random: {
+          name: t('nav.generators'),
+          tools: ['passwordGenerator', 'fortuneWheel']
+        }
       }
-    ],
-    randomizer: [
-      {
-        id: 'decision-making',
-        name: t('nav.decisionMaking'),
-        tools: [
-          { id: 'fortune-wheel', name: t('tools.fortuneWheel'), component: 'FortuneWheel' }
-        ]
-      },
-      {
-        id: 'generators',
-        name: t('nav.generators'),
-        tools: [
-          { id: 'password-generator', name: t('tools.passwordGenerator'), component: 'PasswordGenerator' }
-        ]
+    },
+    text: {
+      name: t('nav.textTools'),
+      subcategories: {
+        processing: {
+          name: t('nav.textProcessing'),
+          tools: ['wordCounter', 'textSorter']
+        }
       }
-    ],
-    health: [
-      {
-        id: 'body-metrics',
-        name: t('nav.bodyMetrics'),
-        tools: [
-          { id: 'bmi-calculator', name: t('tools.bmiCalculator'), component: 'BMICalculator' }
-        ]
-      },
-      {
-        id: 'fitness',
-        name: t('nav.fitness'),
-        tools: [
-          { id: 'calorie-calculator', name: t('tools.calorieCalculator'), component: 'CalorieCalculator' }
-        ]
-      }
-    ]
-  };
-  const categories = [
-    { id: 'text' as Category, name: t('nav.textTools'), icon: Type },
-    { id: 'calculation' as Category, name: t('nav.calculationTools'), icon: Calculator },
-    { id: 'financial' as Category, name: t('nav.financialTools'), icon: DollarSign },
-    { id: 'randomizer' as Category, name: t('nav.randomizerTools'), icon: Shuffle },
-    { id: 'health' as Category, name: t('nav.healthTools'), icon: Heart },
-  ];
-
-  const handleCategoryClick = (categoryId: Category) => {
-    setActiveCategory(categoryId);
-    setActiveSubcategory(null);
-    setActiveTool(null);
+    }
   };
 
-  const handleSubcategoryClick = (subcategoryId: string) => {
-    setActiveSubcategory(subcategoryId);
-    setActiveTool(null);
+  const toggleCategory = (category: string) => {
+    setExpandedCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
   };
 
-  const handleToolClick = (toolId: string) => {
-    setActiveTool(toolId);
+  const handleToolSelect = (category: string, subcategory: string, tool: string) => {
+    setActiveCategory(category);
+    setActiveSubcategory(subcategory);
+    setActiveTool(tool);
+    setIsMobileMenuOpen(false);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Categories */}
-        <div className="flex space-x-6 overflow-x-auto py-4 border-b border-gray-100 dark:border-gray-700">
-          {categories.map((category) => {
-            const Icon = category.icon;
-            return (
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700"
+        aria-label="Toggle menu"
+      >
+        {isMobileMenuOpen ? (
+          <X className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+        ) : (
+          <Menu className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+        )}
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Desktop Navigation */}
+      <nav className="hidden md:block fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto z-30">
+        <div className="p-4">
+          
+          {Object.entries(categories).map(([categoryKey, category]) => (
+            <div key={categoryKey} className="mb-4">
               <button
-                key={category.id}
-                onClick={() => handleCategoryClick(category.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
-                  activeCategory === category.id
-                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-2 border-blue-200 dark:border-blue-700'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
+                onClick={() => toggleCategory(categoryKey)}
+                className={`w-full flex items-center justify-between p-2 rounded-lg text-left transition-colors ${
+                  activeCategory === categoryKey
+                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
                 }`}
               >
-                <Icon className="h-5 w-5" />
                 <span className="font-medium">{category.name}</span>
+                {expandedCategories.includes(categoryKey) ? (
+                  <ChevronDown className="w-4 h-4" />
+                ) : (
+                  <ChevronRight className="w-4 h-4" />
+                )}
               </button>
-            );
-          })}
+              
+              {expandedCategories.includes(categoryKey) && (
+                <div className="ml-4 mt-2 space-y-1">
+                  {Object.entries(category.subcategories).map(([subcategoryKey, subcategory]) => (
+                    <div key={subcategoryKey}>
+                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400 px-2 py-1">
+                        {subcategory.name}
+                      </div>
+                      {subcategory.tools.map((tool) => (
+                        <button
+                          key={tool}
+                          onClick={() => handleToolSelect(categoryKey, subcategoryKey, tool)}
+                          className={`w-full text-left px-4 py-2 text-sm rounded transition-colors ${
+                            activeTool === tool
+                              ? 'bg-blue-50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 border-l-2 border-blue-500'
+                              : 'hover:bg-gray-50 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-400'
+                          }`}
+                        >
+                          {t(`tools.${tool}`)}
+                        </button>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-        
-        {/* Subcategories */}
-        {activeCategory !== 'welcome' && subcategories[activeCategory] && (
-          <div className="flex space-x-4 overflow-x-auto py-3">
-            {subcategories[activeCategory].map((subcategory) => (
+      </nav>
+
+      {/* Mobile Navigation */}
+      <nav className={`md:hidden fixed top-0 left-0 w-80 max-w-[85vw] h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 z-40 transform transition-transform duration-300 ease-in-out ${
+        isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+      } overflow-y-auto`}>
+        <div className="p-4 pt-16">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6">
+            {t('navigation.tools')}
+          </h2>
+          
+          {Object.entries(categories).map(([categoryKey, category]) => (
+            <div key={categoryKey} className="mb-6">
               <button
-                key={subcategory.id}
-                onClick={() => handleSubcategoryClick(subcategory.id)}
-                className={`px-3 py-1 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
-                  activeSubcategory === subcategory.id
-                    ? 'bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                onClick={() => toggleCategory(categoryKey)}
+                className={`w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors ${
+                  activeCategory === categoryKey
+                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
                 }`}
               >
-                {subcategory.name}
+                <span className="font-semibold text-lg">{category.name}</span>
+                {expandedCategories.includes(categoryKey) ? (
+                  <ChevronDown className="w-5 h-5" />
+                ) : (
+                  <ChevronRight className="w-5 h-5" />
+                )}
               </button>
-            ))}
-          </div>
-        )}
-        
-        {/* Tools */}
-        {activeSubcategory && subcategories[activeCategory] && (
-          <div className="flex space-x-3 overflow-x-auto py-2 pb-4">
-            {subcategories[activeCategory]
-              .find(sub => sub.id === activeSubcategory)
-              ?.tools.map((tool) => (
-                <button
-                  key={tool.id}
-                  onClick={() => handleToolClick(tool.id)}
-                  className={`px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-colors ${
-                    activeTool === tool.id
-                      ? 'bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700'
-                      : 'text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
-                >
-                  {tool.name}
-                </button>
-              ))}
-          </div>
-        )}
-      </div>
-    </nav>
+              
+              {expandedCategories.includes(categoryKey) && (
+                <div className="mt-3 space-y-3">
+                  {Object.entries(category.subcategories).map(([subcategoryKey, subcategory]) => (
+                    <div key={subcategoryKey} className="ml-4">
+                      <h4 className="text-sm font-semibold text-gray-600 dark:text-gray-400 px-2 py-2 uppercase tracking-wide">
+                        {subcategory.name}
+                      </h4>
+                      <div className="space-y-1">
+                        {subcategory.tools.map((tool) => (
+                          <button
+                            key={tool}
+                            onClick={() => handleToolSelect(categoryKey, subcategoryKey, tool)}
+                            className={`w-full text-left px-4 py-3 text-base rounded-lg transition-colors min-h-[44px] flex items-center ${
+                              activeTool === tool
+                                ? 'bg-blue-50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 border-l-4 border-blue-500'
+                                : 'hover:bg-gray-50 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-400'
+                            }`}
+                          >
+                            {t(`tools.${tool}`)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </nav>
+    </>
   );
-}
+};
+
+export default Navigation;
