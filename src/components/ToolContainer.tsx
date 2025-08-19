@@ -18,25 +18,25 @@ interface ToolContainerProps {
 export function ToolContainer({ activeTool }: ToolContainerProps) {
   const renderTool = () => {
     switch (activeTool) {
-      case 'bmi-calculator':
+      case 'bmiCalculator':
         return <BMICalculator />;
-      case 'calorie-calculator':
+      case 'calorieCalculator':
         return <CalorieCalculator />;
-      case 'fortune-wheel':
+      case 'fortuneWheel':
         return <FortuneWheel />;
-      case 'password-generator':
+      case 'passwordGenerator':
         return <PasswordGenerator />;
-      case 'discount-calculator':
+      case 'discountCalculator':
         return <DiscountCalculator />;
-      case 'compound-interest':
+      case 'compoundInterest':
         return <CompoundInterestCalculator />;
-      case 'basic-calculator':
+      case 'basicCalculator':
         return <BasicCalculator />;
-      case 'temperature-converter':
+      case 'temperatureConverter':
         return <TemperatureConverter />;
-      case 'text-sorter':
+      case 'textSorter':
         return <TextSorter />;
-      case 'word-counter':
+      case 'wordCounter':
         return <WordCounter />;
       default:
         return null;

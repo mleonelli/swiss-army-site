@@ -25,42 +25,42 @@ const Navigation: React.FC<NavigationProps> = ({
 
   const categories = {
     calculators: {
-      name: t('categories.calculators'),
+      name: t('nav.calculationTools'),
       subcategories: {
         basic: {
-          name: t('subcategories.basic'),
-          tools: ['basic-calculator', 'bmi-calculator', 'calorie-calculator']
+          name: t('nav.basicMath'),
+          tools: ['basicCalculator', 'bmiCalculator', 'calorieCalculator']
         },
         financial: {
-          name: t('subcategories.financial'),
-          tools: ['discount-calculator', 'compound-interest-calculator']
+          name: t('nav.pricing'),
+          tools: ['discountCalculator', 'compoundInterest']
         }
       }
     },
     converters: {
-      name: t('categories.converters'),
+      name: t('nav.calculationTools'),
       subcategories: {
         units: {
-          name: t('subcategories.units'),
-          tools: ['temperature-converter']
+          name: t('nav.unitConversion'),
+          tools: ['temperatureConverter']
         }
       }
     },
     generators: {
-      name: t('categories.generators'),
+      name: t('nav.randomizerTools'),
       subcategories: {
         random: {
-          name: t('subcategories.random'),
-          tools: ['password-generator', 'fortune-wheel']
+          name: t('nav.generators'),
+          tools: ['passwordGenerator', 'fortuneWheel']
         }
       }
     },
     text: {
-      name: t('categories.text'),
+      name: t('nav.textTools'),
       subcategories: {
         processing: {
-          name: t('subcategories.processing'),
-          tools: ['word-counter', 'text-sorter']
+          name: t('nav.textProcessing'),
+          tools: ['wordCounter', 'textSorter']
         }
       }
     }
@@ -111,9 +111,6 @@ const Navigation: React.FC<NavigationProps> = ({
       {/* Desktop Navigation */}
       <nav className="hidden md:block w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-full overflow-y-auto">
         <div className="p-4">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
-            {t('navigation.tools')}
-          </h2>
           
           {Object.entries(categories).map(([categoryKey, category]) => (
             <div key={categoryKey} className="mb-4">
