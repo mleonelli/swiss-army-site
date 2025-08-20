@@ -164,9 +164,7 @@ const Navigation: React.FC<NavigationProps> = ({
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       } overflow-y-auto`}>
         <div className="p-4 pt-16">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-6">
-            {t('navigation.tools')}
-          </h2>
+          
           
           {Object.entries(categories).map(([categoryKey, category]) => (
             <div key={categoryKey} className="mb-6">
