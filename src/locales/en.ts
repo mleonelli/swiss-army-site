@@ -30,6 +30,7 @@ export const en = {
   'tools.passwordGenerator': 'Password Generator',
   'tools.bmiCalculator': 'BMI Calculator',
   'tools.calorieCalculator': 'Calorie Calculator',
+  'tools.feedbackForm': 'Feedback Form',
   
   // Common
   'common.calculate': 'Calculate',

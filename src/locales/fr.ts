@@ -30,6 +30,7 @@ export const fr = {
   'tools.passwordGenerator': 'Générateur de Mot de Passe',
   'tools.bmiCalculator': 'Calculateur IMC',
   'tools.calorieCalculator': 'Calculateur de Calories',
+  'tools.feedbackForm': 'Formulaire de Commentaires',
   
   // Common
   'common.calculate': 'Calculer',

@@ -24,6 +24,15 @@ const Navigation: React.FC<NavigationProps> = ({
   const [expandedCategories, setExpandedCategories] = useState<string[]>([activeCategory]);
 
   const categories = {
+    feedback: {
+      name: 'Feedback',
+      subcategories: {
+        general: {
+          name: 'Send Feedback',
+          tools: ['feedbackForm']
+        }
+      }
+    },
     calculators: {
       name: t('nav.calculationTools'),
       subcategories: {

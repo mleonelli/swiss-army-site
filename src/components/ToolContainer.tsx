@@ -9,6 +9,7 @@ import { TemperatureConverter } from './tools/TemperatureConverter';
 import { CompoundInterestCalculator } from './tools/CompoundInterestCalculator';
 import { PasswordGenerator } from './tools/PasswordGenerator';
 import { CalorieCalculator } from './tools/CalorieCalculator';
+import { FeedbackForm } from './tools/FeedbackForm';
 import { Category } from './Navigation';
 
 interface ToolContainerProps {
@@ -18,6 +19,8 @@ interface ToolContainerProps {
 export function ToolContainer({ activeTool }: ToolContainerProps) {
   const renderTool = () => {
     switch (activeTool) {
+      case 'feedbackForm':
+        return <FeedbackForm />;
       case 'bmiCalculator':
         return <BMICalculator />;
       case 'calorieCalculator':
